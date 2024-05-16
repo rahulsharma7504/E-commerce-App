@@ -6,15 +6,14 @@ const {Auth,isAdmin} =require('../Middleware/Auth')
 
 
 const userController = require('../Controller/UserController');
-
 userRoute.post('/register',userController.CreateUser);
-userRoute.post('/login',userController.LoginUser);
+userRoute.post('/forget',userController.Forget);
+userRoute.post('/reset_pass',userController.Reset);
+userRoute.post('/login',userController.LoginUser); 
 userRoute.get('/admin',Auth,isAdmin,userController.Admin);
-// userRoute.post('/forget',userController.Forget);
-// userRoute.post('/reset_pass',userController.Reset);
 
+ 
 
+ 
 
-
-
-module.exports=userRoute
+module.exports=userRoute 
