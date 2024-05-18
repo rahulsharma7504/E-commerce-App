@@ -39,7 +39,7 @@ const updateCategory = async (req, res) => {
 }
 
 const AllCategory = async (req, res) => {
-    try { 
+    try {  
         const allCategory = await Category.find();
         console.log(allCategory);
         res.status(200).json({ message: "All Category", Category: allCategory });
@@ -47,7 +47,7 @@ const AllCategory = async (req, res) => {
         console.error(error); // Log the error for debugging
         res.status(500).json({ error: "Internal Server Error" });
     }
-};
+}; 
 
 const OneCategory=async(req,res)=>{
     try {

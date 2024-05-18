@@ -2,6 +2,7 @@ const dotenv=require('dotenv').config();
 const cloudinary=require('cloudinary').v2;
 const slugify=require('slugify');
 const ProductModel = require('../Model/ProductModel');
+const Razorpay = require('razorpay');
 
 
 const CreateProduct=async(req,res)=>{
@@ -208,6 +209,48 @@ const SimilarProduct = async (req, res) => {
     }
   };
 
+
+  
+const CategoryProducts = async (req, res) => {
+    try {
+        const {id}=req.params;
+        const categoryProducts = await ProductModel.find({category:id})
+        res.status(200).json({ data: categoryProducts, message: "Data has been fetched successfully" });
+        
+       
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Error in fetching the data." })
+    }
+}
+
+ 
+const razorpay = new Razorpay({
+    key_id: 'rzp_test_VntZm15bTqdhSc',
+    key_secret: 'UMWsweG6PpqiXo21KrRj4MaV'
+  });
+
+
+
+// Order Product
+const OrderDetails = async (req, res) => {
+    try {
+      const { amount, currency } = req.body;
+      console.log('Amount:', amount, 'Currency:', currency);
+  
+      const options = {
+        amount: amount , // amount in the smallest currency unit (paise for INR)
+        currency: currency,
+        receipt: `receipt_order_${Date.now()}`,
+      };
+      const order = await razorpay.orders.create(options);
+      res.status(200).json(order);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Error in creating the order." });
+    }
+  };
+
 module.exports={
     CreateProduct,
     CreateProductget,
@@ -218,5 +261,7 @@ module.exports={
     filterProduct,
     Pagination,
     Search,
-    SimilarProduct
+    SimilarProduct,
+    CategoryProducts,
+    OrderDetails
 }

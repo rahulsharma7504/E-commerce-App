@@ -26,6 +26,10 @@ productRoute.post('/create',upload.single('image'),productController.CreateProdu
 productRoute.get('/all',productController.AllProduct);
 
 productRoute.get('/single/:id',productController.SingleProduct);
+// get product by category Id
+
+productRoute.get('/category/:id',productController.CategoryProducts);
+productRoute.post('/create-order',productController.OrderDetails);
 
 productRoute.put('/update/:id',upload.single('image'),productController.UpdateProduct);
 

@@ -58,7 +58,7 @@ const CreateUser = async (req, res) => {
 
     // // Create a new user object
     const newUser = new User({
-      name:formData.name,
+      name:formData.name, 
       email:formData.email,
       password: hashedPassword , // Use the hashed password
       phone:formData.phone,
@@ -178,6 +178,43 @@ const Reset = async (req, res) => {
 
 
 
+const ProfileUpdate = async (req, res) => {
+  try {
+    const { formData } = req.body;
+
+    // Hash the password
+    const hashedPassword = bcrypt.hashSync(formData.password, 12);
+
+    // Find the user by email
+    const user = await User.findOne({ email: formData.email });
+    if (!user) {
+      return res.status(404).json({ error: "User Not Found" });
+    }
+
+    // Update the user details
+    const updatedUser = await User.findOneAndUpdate(
+      { email: formData.email },
+      {
+        $set: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          password: hashedPassword, // Use the hashed password
+        },
+      },
+      { new: true } // Return the updated document
+    );
+
+    // Respond with the updated user details
+    res.status(200).json({user:updatedUser});
+
+  } catch (error) {
+    // Handle any errors
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
 module.exports = {
@@ -185,5 +222,6 @@ module.exports = {
   LoginUser,
   Admin,
   Forget,
-  Reset
+  Reset,
+  ProfileUpdate
 }

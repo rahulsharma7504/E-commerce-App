@@ -10,6 +10,7 @@ userRoute.post('/register',userController.CreateUser);
 userRoute.post('/forget',userController.Forget);
 userRoute.post('/reset_pass',userController.Reset);
 userRoute.post('/login',userController.LoginUser); 
+userRoute.put('/profile',userController.ProfileUpdate); 
 userRoute.get('/admin',Auth,isAdmin,userController.Admin);
 
  
