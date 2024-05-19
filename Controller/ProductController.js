@@ -12,9 +12,9 @@ const CreateProduct=async(req,res)=>{
     const slug = slugify(String(name));
     
     cloudinary.config({
-        cloud_name: 'de5v2dpqx',
-        api_key: '248122715433517',
-        api_secret: 'ZmtP6_fCj_5onSBJf4D1tm3GbB4',
+        cloud_name: process.env.CLOUD_NAME,
+        api_key: process.env.API_KEY,
+        api_secret:process.env.API_SECRET,
         secure: true,
     });
     
