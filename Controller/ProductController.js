@@ -227,8 +227,8 @@ const CategoryProducts = async (req, res) => {
 
  
 const razorpay = new Razorpay({
-    key_id: 'rzp_test_VntZm15bTqdhSc',
-    key_secret: 'UMWsweG6PpqiXo21KrRj4MaV'
+    key_id:process.env.RezorPayKey_id,
+    key_secret: process.env.RezorPaySecret_id
   });
 
 
