@@ -3,6 +3,7 @@ const cloudinary=require('cloudinary').v2;
 const slugify=require('slugify');
 const ProductModel = require('../Model/ProductModel');
 const Razorpay = require('razorpay');
+const BookingModel=require('../Model/Booking');
 
 
 const CreateProduct=async(req,res)=>{
@@ -235,21 +236,48 @@ const razorpay = new Razorpay({
 // Order Product
 const OrderDetails = async (req, res) => {
     try {
-      const { amount, currency } = req.body;
-      console.log('Amount:', amount, 'Currency:', currency);
-  
-      const options = {
-        amount: amount , // amount in the smallest currency unit (paise for INR)
-        currency: currency,
-        receipt: `receipt_order_${Date.now()}`,
-      };
-      const order = await razorpay.orders.create(options);
-      res.status(200).json(order);
+        const { Amount, Currency, UserID, Products, totalPrice, Status } = req.body;
+
+        // Map products array
+        const mappedProducts = Products.map(product => ({
+            ProductName: product.name,
+            ProductID: product._id
+        }));
+
+        // Create Razorpay order
+        const options = {
+            amount: Amount * 100, // Convert amount to the smallest currency unit
+            currency: Currency.toUpperCase(), // Ensure currency code is uppercase
+            receipt: `receipt_order_${Date.now()}`
+        };
+
+        const order = await razorpay.orders.create(options);
+
+        // If order creation is successful, proceed to create booking
+        if (order) {
+            const newBooking = new BookingModel({
+                Products: mappedProducts,
+                UserID: UserID,
+                Amount: totalPrice,
+                Currency: Currency,
+                Status: 'Booked', // Update status to 'Booked'
+                TransactionID: order.id // Use Razorpay order ID as TransactionID
+            });
+
+            const booking = await newBooking.save();
+
+            // Send success response with order data and booking data
+            res.status(201).json({ order, message: "Order created successfully", booking });
+        } else {
+            // If order creation fails, send error response
+            throw new Error('Failed to create Razorpay order');
+        }
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Error in creating the order." });
+        console.error(err);
+        res.status(500).json({ message: "Error in creating the order." });
     }
-  };
+};
+
 
 module.exports={
     CreateProduct,
@@ -265,3 +293,6 @@ module.exports={
     CategoryProducts,
     OrderDetails
 }
+ // res.status(200).json({ data: booking, message: "Data has been fetched successfully" });
+  
+    // //  

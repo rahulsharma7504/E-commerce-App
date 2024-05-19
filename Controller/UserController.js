@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const rendomString = require('randomstring');
 const nodemailer = require('nodemailer');
+const BookingModel=require('../Model/Booking');
 
 
 
@@ -217,11 +218,20 @@ const ProfileUpdate = async (req, res) => {
 };
 
 
+const AllBookings=async(req,res)=>{
+  
+  const Bookings=await BookingModel.find();
+  res.status(200).json({message:"All Bookings",Bookings:Bookings})
+
+}
+
+
 module.exports = {
   CreateUser,
   LoginUser,
   Admin,
   Forget,
   Reset,
-  ProfileUpdate
+  ProfileUpdate,
+  AllBookings
 }
