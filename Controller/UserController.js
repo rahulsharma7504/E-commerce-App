@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const rendomString = require('randomstring');
 const nodemailer = require('nodemailer');
 const BookingModel=require('../Model/Booking');
+const userModel = require('../Model/userModel');
 
 
 
@@ -224,6 +225,40 @@ const AllBookings=async(req,res)=>{
   res.status(200).json({message:"All Bookings",Bookings:Bookings})
 
 }
+const AllUsers = async (req, res) => {
+  try {
+    const { role } = req.query; // get role from query parameters
+    let users;
+
+    if (role !== undefined) {
+      // If role is provided in the query, filter by role
+      users = await User.find({ role: parseInt(role) }); // Ensure role is parsed to an integer
+    } else {
+      // If no role is provided, return all users
+      users = await User.find({});
+    }
+
+    if (users.length > 0) {
+      res.status(200).json({ message: "All Users", users: users });
+    } else {
+      res.status(404).json({ message: "Couldn't find users" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred while fetching users", error: error.message });
+  }
+};
+
+const deleteUsers=async(req,res)=>{
+  const {id}=req.params;
+  
+  const Bookings=await User.findByIdAndDelete(id);
+  res.status(200).json({message:"User Deleted Successfullt"})
+
+}
+
+
+
+
 
 
 module.exports = {
@@ -233,5 +268,7 @@ module.exports = {
   Forget,
   Reset,
   ProfileUpdate,
-  AllBookings
+  AllBookings,
+  AllUsers,
+  deleteUsers
 }

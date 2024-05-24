@@ -24,6 +24,7 @@ productRoute.get('/create',productController.CreateProductget);
 productRoute.post('/create',upload.single('image'),productController.CreateProduct);
 
 productRoute.get('/all',productController.AllProduct);
+productRoute.get('/all-manage',productController.AllManage);
 
 productRoute.get('/single/:id',productController.SingleProduct);
 // get product by category Id

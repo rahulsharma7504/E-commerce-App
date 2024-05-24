@@ -62,6 +62,17 @@ const AllProduct=async(req,res)=>{
         return res.status(500).json({ error: "Internal Server Error" });
 }
 }
+
+const AllManage=async(req,res)=>{
+    try {
+        const allProduct = await ProductModel.find()
+        console.log(allProduct);
+        res.status(200).json({ message: "All Product", Product: allProduct,totel:allProduct.length });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        return res.status(500).json({ error: "Internal Server Error" });
+}
+}
 const SingleProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -283,6 +294,7 @@ module.exports={
     CreateProduct,
     CreateProductget,
     AllProduct,
+    AllManage,
     SingleProduct,
     DeleteProduct,
     UpdateProduct,

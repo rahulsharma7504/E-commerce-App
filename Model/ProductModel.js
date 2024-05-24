@@ -27,6 +27,7 @@ const productSchema=new mongoose.Schema({
         type:Number,
         required:true,
     },
+    
     shipping:{
         type:Boolean,
         required:true,

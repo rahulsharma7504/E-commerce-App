@@ -8,7 +8,9 @@ const {Auth,isAdmin} =require('../Middleware/Auth')
 const userController = require('../Controller/UserController');
 userRoute.post('/register',userController.CreateUser);
 userRoute.get('/bookings',userController.AllBookings);
+userRoute.get('/all-users',userController.AllUsers);
 userRoute.post('/forget',userController.Forget);
+userRoute.post('/delete-user/:id',userController.deleteUsers);
 userRoute.post('/reset_pass',userController.Reset);
 userRoute.post('/login',userController.LoginUser); 
 userRoute.put('/profile',userController.ProfileUpdate); 
