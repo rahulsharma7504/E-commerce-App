@@ -31,6 +31,7 @@ productRoute.get('/single/:id',productController.SingleProduct);
 
 productRoute.get('/category/:id',productController.CategoryProducts);
 productRoute.post('/create-order',productController.OrderDetails);
+productRoute.post('/payment-verify',productController.PaymentVerify);
 
 productRoute.put('/update/:id',upload.single('image'),productController.UpdateProduct);
 

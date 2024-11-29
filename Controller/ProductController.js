@@ -247,48 +247,56 @@ const razorpay = new Razorpay({
 // Order Product
 const OrderDetails = async (req, res) => {
     try {
-        const { Amount, Currency, UserID, Products, totalPrice, Status } = req.body;
+        const {currency,amount}=req.body;
 
+        const options = {
+            amount: amount, // amount in the smallest currency unit
+            currency: currency,
+        };
+        
+            const order = await razorpay.orders.create(options);
+            res.status(200).json(order);
+        } catch (error) {
+            res.status(500).send(error);
+        }
+
+    }
+
+
+        
+
+
+
+
+const PaymentVerify=async(req,res)=>{
+    try {
+        const { paymentId, orderId, signature,userID, totalPrice, currency, Status,cart } = req.body;
         // Map products array
-        const mappedProducts = Products.map(product => ({
+        const mappedProducts = cart.map(product => ({
             ProductName: product.name,
             ProductID: product._id
         }));
+        const newBooking = new BookingModel({
+                    Products: mappedProducts,
+                    UserID: userID,
+                    Amount: totalPrice,
+                    Currency: currency,
+                    Status:Status , // Update status to 'Booked'
+                    Order_Id: orderId, // Use Razorpay order ID as TransactionID
+                    paymentId:paymentId
 
-        // Create Razorpay order
-        const options = {
-            amount: Amount * 100, // Convert amount to the smallest currency unit
-            currency: Currency.toUpperCase(), // Ensure currency code is uppercase
-            receipt: `receipt_order_${Date.now()}`
-        };
-
-        const order = await razorpay.orders.create(options);
-
-        // If order creation is successful, proceed to create booking
-        if (order) {
-            const newBooking = new BookingModel({
-                Products: mappedProducts,
-                UserID: UserID,
-                Amount: totalPrice,
-                Currency: Currency,
-                Status: 'Booked', // Update status to 'Booked'
-                TransactionID: order.id // Use Razorpay order ID as TransactionID
-            });
-
+                }); 
             const booking = await newBooking.save();
+            res.status(201).json(booking);
 
-            // Send success response with order data and booking data
-            res.status(201).json({ order, message: "Order created successfully", booking });
-        } else {
-            // If order creation fails, send error response
-            throw new Error('Failed to create Razorpay order');
-        }
+
+       
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Error in creating the order." });
+        console.log(err);
+        res.status(500).json({ message: "Error in fetching the data." })
     }
-};
 
+}
 
 module.exports={
     CreateProduct,
@@ -303,8 +311,8 @@ module.exports={
     Search,
     SimilarProduct,
     CategoryProducts,
-    OrderDetails
+    OrderDetails,
+    PaymentVerify
 }
  // res.status(200).json({ data: booking, message: "Data has been fetched successfully" });
   
-    // //  
