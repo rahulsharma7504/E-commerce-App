@@ -250,7 +250,7 @@ const AllUsers = async (req, res) => {
 
 const deleteUsers=async(req,res)=>{
   const {id}=req.params;
-  
+  console.log(id)
   const Bookings=await User.findByIdAndDelete(id);
   res.status(200).json({message:"User Deleted Successfullt"})
 
