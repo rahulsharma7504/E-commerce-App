@@ -15,6 +15,8 @@ app.use(express.json());
  
 app.use(morgan('dev'));
 app.use(cors()); 
+
+app.use(express.static(path.join(__dirname, 'client/build')));
 // For User API  
 const UserRoutes=require('./Routes/UserRoutes');
 app.use('/user',UserRoutes);
@@ -31,6 +33,10 @@ const ProductRoutes=require('./Routes/ProductRoute');
 app.use('/product',ProductRoutes);
 
 // For Order API
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 const PORT = process.env.PORT // Use PORT from environment variable if available, otherwise default to 3000
 
