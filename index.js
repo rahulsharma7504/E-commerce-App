@@ -4,18 +4,18 @@ const path = require('path');
 const morgan = require('morgan');
 const cors=require('cors');
 const mongoose=require('mongoose');
-mongoose.connect(`${process.env.MONGO_URL}e-commerce`).then(()=>{
+mongoose.connect(`${process.env.MONGO_URL}`,{ useNewUrlParser: true, useUnifiedTopology: true }).then(()=>{
     console.log('Database Connected');
 })
  
-const app = express();
-app.use(express.json());
+const app = express();         
+app.use(express.json()); 
 
 
-
+ 
 app.use(morgan('dev'));
 app.use(cors()); 
-// For User API
+// For User API  
 const UserRoutes=require('./Routes/UserRoutes');
 app.use('/user',UserRoutes);
 

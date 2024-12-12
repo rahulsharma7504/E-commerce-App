@@ -10,9 +10,9 @@ userRoute.post('/register',userController.CreateUser);
 userRoute.get('/bookings',userController.AllBookings);
 userRoute.get('/all-users',userController.AllUsers);
 userRoute.post('/forget',userController.Forget);
-userRoute.post('/delete-user/:id',userController.deleteUsers);
-userRoute.post('/reset_pass',userController.Reset);
-userRoute.post('/login',userController.LoginUser); 
+userRoute.post('/delete-user/:id',userController.deleteUsers); 
+userRoute.post('/reset_pass',userController.Reset);  
+userRoute.post('/login',userController.LoginUser);  
 userRoute.put('/profile',userController.ProfileUpdate); 
 userRoute.get('/admin',Auth,isAdmin,userController.Admin);
 

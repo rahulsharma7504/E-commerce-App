@@ -2,12 +2,12 @@ const Category = require('../Model/Category');
 const slugify = require('slugify');
 
 
-const createCategory = async (req, res) => {
+const   createCategory = async (req, res) => {
     try {
         const { name } = req.body;
         const findexistCategory = await Category.findOne({ name: name });
         if (findexistCategory) {
-            return res.status(400).json({ error: "Category Already Exist" });
+            return res.status(401).send({ message: "Category Already Exist" });
         }
 
         const category = await new Category({
