@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "index.js ",
+    "start": " node index.js ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "cd client && npm start ",
     "dev": "concurrently \"npm run start\" \"npm run client\""
